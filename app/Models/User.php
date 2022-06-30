@@ -6,6 +6,8 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
+use jeremykenedy\LaravelRoles\Models\Role;
 use Laravel\Sanctum\HasApiTokens;
 use jeremykenedy\LaravelRoles\Traits\HasRoleAndPermission;
 
@@ -20,12 +22,35 @@ class User extends Authenticatable implements JWTSubject
      *
      * @var array<int, string>
      */
+
+    protected $table = 'users';
+
     protected $fillable = [
+        'id',
         'name',
         'nik',
         'email',
         'password',
+        'id_kel_desa',
     ];
+
+    public function kelurahan()
+    {
+        return $this->hasOne(kel_desa::class, 'id', 'id_kel_desa');
+    }
+
+    public function getdatapenduduk()
+    {
+        return $this->hasOne(data_penduduk::class, 'nik', 'nik');
+    }
+
+    public function roleuser()
+    {
+        return  $this->hasOne(roleuser::class, 'user_id', 'id');
+    }
+
+
+
 
     /**
      * The attributes that should be hidden for serialization.

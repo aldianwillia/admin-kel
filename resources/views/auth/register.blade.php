@@ -1,9 +1,7 @@
 <x-guest-layout>
     <x-auth-card>
         <x-slot name="logo">
-            <a href="/">
-                <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
-            </a>
+            <img src="{{ url('/images/Logo_Bukittinggi.png') }}" width="50px">
         </x-slot>
 
         <!-- Validation Errors -->
@@ -17,6 +15,12 @@
                 <x-label for="name" :value="__('Name')" />
 
                 <x-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus />
+            </div>
+
+            <div class="mt-4">
+                <x-label for="email" :value="__('Nik')" />
+
+                <x-input id="nik" class="block mt-1 w-full" type="text" name="nik" :value="old('nik')" required />
             </div>
 
             <!-- Email Address -->

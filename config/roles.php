@@ -139,7 +139,7 @@ return [
     */
 
     // Enable Optional Roles Gui
-    'rolesGuiEnabled'               => env('ROLES_GUI_ENABLED', false),
+    'rolesGuiEnabled'               => env('ROLES_GUI_ENABLED', true),
 
     // Enable `auth` middleware
     'rolesGuiAuthEnabled'           => env('ROLES_GUI_AUTH_ENABLED', true),
@@ -159,7 +159,7 @@ return [
     'rolesGuiCreateNewPermissionsMiddleware'     => env('ROLES_GUI_CREATE_PERMISSION_MIDDLEWARE', 'admin'), // admin, XXX. ... or perms.XXX
 
     // The parent blade file
-    'bladeExtended'                 => env('ROLES_GUI_BLADE_EXTENDED', 'layouts.app'),
+    'bladeExtended'                 => env('ROLES_GUI_BLADE_EXTENDED', 'layout.main'),
 
     // Blade Extension Placement
     'bladePlacement'                => env('ROLES_GUI_BLADE_PLACEMENT', 'yield'),
@@ -170,19 +170,19 @@ return [
     'titleExtended'                 => env('ROLES_GUI_TITLE_EXTENDED', 'template_title'),
 
     // Switch Between bootstrap 3 `panel` and bootstrap 4 `card` classes
-    'bootstapVersion'               => env('ROLES_GUI_BOOTSTRAP_VERSION', '4'),
+    'bootstapVersion'               => env('ROLES_GUI_BOOTSTRAP_VERSION', '5'),
 
     // Additional Card classes for styling -
     // See: https://getbootstrap.com/docs/4.0/components/card/#background-and-color
     // Example classes: 'text-white bg-primary mb-3'
-    'bootstrapCardClasses'          => env('ROLES_GUI_CARD_CLASSES', ''),
+    'bootstrapCardClasses'          => env('ROLES_GUI_CARD_CLASSES', '5'),
 
     // Bootstrap Tooltips
     'tooltipsEnabled'               => env('ROLES_GUI_TOOLTIPS_ENABLED', true),
 
     // jQuery
     'enablejQueryCDN'               => env('ROLES_GUI_JQUERY_CDN_ENABLED', true),
-    'JQueryCDN'                     => env('ROLES_GUI_JQUERY_CDN_URL', 'https://code.jquery.com/jquery-3.3.1.min.js'),
+    'JQueryCDN'                     => env('ROLES_GUI_JQUERY_CDN_URL', 'https://code.jquery.com/jquery-3.6.0.min.js'),
 
     // Selectize JS
     'enableSelectizeJsCDN'          => env('ROLES_GUI_SELECTIZEJS_CDN_ENABLED', true),

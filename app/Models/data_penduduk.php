@@ -20,4 +20,9 @@ class data_penduduk extends Model
     {
         DB::table('data_penduduks')->where('nik', $nik)->update($data);
     }
+
+    public function getdatakeldes()
+    {
+        return $this->hasOne(kel_desa::class, 'id', 'kelurahan');
+    }
 }

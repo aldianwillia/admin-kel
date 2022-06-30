@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\data_penduduk;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -33,7 +34,7 @@ class AuthController extends Controller
     {
         $user_crendential = request(['email', 'password']);
 
-        if (!$token = Auth::attempt($user_crendential)) {
+        if (!$token = auth('api')->attempt($user_crendential)) {
             return response()
                 ->json([
                     'status' => false,
@@ -52,7 +53,7 @@ class AuthController extends Controller
             'message' => 'Berhasil Login',
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => Auth::factory()->getTTL() * 60
+            // 'expires_in' => auth('api')->factory()->getTTL() * 60
         ]);
     }
     //END==LOGIN===================================//
@@ -78,24 +79,34 @@ class AuthController extends Controller
         if ($validator->fails()) {
             $response['response'] = $validator->messages();
         } else {
+            $penduduk = data_penduduk::where('nik', $request->nik)->first();
+            if ($penduduk) {
+                $user = User::create([
+                    'name' => $request->name,
+                    'nik' => $request->nik,
+                    'email' => $request->email,
+                    'password' => Hash::make($request->password),
+                    'id_kel_desa' => $penduduk->kelurahan
+                ]);
+                if ($user) {
 
-            $user = User::create([
-                'name' => $request->name,
-                'nik' => $request->nik,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
-            ]);
+                    //attach role
+                    $user->attachRole(2);
 
-            if ($user) {
+                    return response()->json([
+                        'status' => true,
+                        'message' => 'User berhasil diregistrasi'
+                    ]);
+                }
+
                 return response()->json([
-                    'status' => true,
-                    'message' => 'User berhasil diregistrasi'
+                    'status' => false,
+                    'message' => 'User gagal diregistrasi'
                 ]);
             }
-
             return response()->json([
                 'status' => false,
-                'message' => 'User gagal diregistrasi'
+                'message' => 'nik tidak terdaftar di data penduduk kelurahan'
             ]);
         }
 
@@ -127,7 +138,11 @@ class AuthController extends Controller
     //ME=========================================//
     public function me(Request $request)
     {
-        return response()->json(auth()->user());
+        $user = User::with('roleuser.roleid')->where('id', Auth::user()->id)->first();
+        return response()->json([
+            'status' => true,
+            'data' => $user
+        ]);
     }
 
     //ENDME=========================================//

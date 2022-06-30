@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\data_penduduk;
 use App\Models\KodeSurat;
 use App\Models\surat_nikah;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Request;
 
 class SuratNikahController extends Controller
@@ -58,37 +59,49 @@ class SuratNikahController extends Controller
     //menginput data inputan user ke dalam Table surat_nikah DB=================================
     public function submitsuratnikah(Request $request)
     {
-        $suratnikah = surat_nikah::create([     //data ditampung dalam variabel suratnikah
-            'nik_calon' => $request->nik_calon,
-            'nik_pasangan' => $request->nik_pasangan,
-            'nik_ortulaki' => $request->nik_ortulaki,
-            'nik_ortupere' => $request->nik_ortupere,
-            'kode_surat' => $request->kode_surat,
-            'suku_calon' => $request->suku_calon,
-            'suku_pasangan' => $request->suku_pasangan,
-            'nama_mamak' => $request->kode_surat,
-            'tmplahir_mamak' => $request->tmplahir_mamak,
-            'tgllahir_mamak' => $request->tgllahir_mamak,
-            'negeriasal_mamak' => $request->negeriasal_mamak,
-            'bangsa_mamak' => $request->negeriasal_mamak,
-            'kerja_mamak' => $request->negeriasal_mamak,
-            'alamat_mamak' => $request->alamat_mamak,
-            'kawin_ke' => $request->kawin_ke,
-            'tgl_nikah' => $request->tgl_nikah,
-            'jam_nikah' => $request->jam_nikah,
-            'tempat_nikah' => $request->tempat_nikah,
-            'mahar_nikah' => $request->mahar_nikah,
-        ]);
+        $datacalon = data_penduduk::where('nik', $request->nik_calon)->first();
+        $datapasangan = data_penduduk::where('nik', $request->nik_pasangan)->first();
+
         //kondisi
-        if ($suratnikah) {             //jika data berhasil diinput
-            return response()->json([  // kirim response status dan message dalan bentuk json
-                'status' => true,
-                'message' => 'Pengajuan Berhasil Dilakukan'
+        if ($datacalon['status_kawin'] == 'Belum') {
+
+            if ($datapasangan['status_kawin'] == 'Belum') {
+                $suratnikah = surat_nikah::create([     //data ditampung dalam variabel suratnikah
+                    'nik_calon' => $request->nik_calon,
+                    'nik_pasangan' => $request->nik_pasangan,
+                    'nik_ortulaki' => $request->nik_ortulaki,
+                    'nik_ortupere' => $request->nik_ortupere,
+                    'suku_calon' => $request->suku_calon,
+                    'suku_pasangan' => $request->suku_pasangan,
+                    'nama_mamak' => $request->nama_mamak,
+                    'tmplahir_mamak' => $request->tmplahir_mamak,
+                    'tgllahir_mamak' => $request->tgllahir_mamak,
+                    'negeriasal_mamak' => $request->negeriasal_mamak,
+                    'bangsa_mamak' => $request->negeriasal_mamak,
+                    'kerja_mamak' => $request->negeriasal_mamak,
+                    'alamat_mamak' => $request->alamat_mamak,
+                    'kawin_ke' => $request->kawin_ke,
+                    'tgl_nikah' => $request->tgl_nikah,
+                    'jam_nikah' => $request->jam_nikah,
+                    'tempat_nikah' => $request->tempat_nikah,
+                    'mahar_nikah' => $request->mahar_nikah,
+                ]);
+                if ($suratnikah) {             //jika data berhasil diinput
+                    return response()->json([  // kirim response status dan message dalan bentuk json
+                        'status' => true,
+                        'message' => 'Pengajuan Berhasil Dilakukan'
+                    ]);
+                }
+            }
+            return response()->json([   //jika gagal respon status false
+                'status' => false,
+                'message' => 'Anda Tidak Dapat Melakukan Permintaan Karna Status Kewarga Negaraan Pasangan atau Anda Sudah Kawin'
             ]);
         }
+
         return response()->json([   //jika gagal respon status false
             'status' => false,
-            'message' => 'Pengajuan Gagal Dilakukan'
+            'message' => 'Anda Tidak Dapat Melakukan Permintaan Karna Status Kewarga Negaraan Pasangan atau Anda Sudah Kawin'
         ]);
     }
 

@@ -4,103 +4,148 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <style>
-    
+        .text-paragraf{
+            text-indent: 0.5in;
+        }
+        .cup{
+            text-align:center; 
+            width:100%;
+        }
+        .cup p{
+            line-height:2px;
+        }
+
+        .table-bio{
+            margin-left: 130px; 
+            margin-right:auto;
+        }
+
+        .table-kel{
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        .table-kel,.table-kel th {
+            border: solid 1px black;
+        }
+
+        .table-kel,.table-kel td {
+            border-right: solid 1px black;
+        }
+
+        .table-kel td {
+            text-transform: capitalize
+        }
+
+        .text-center{
+            text-align: center
+        }
+
     </style>
     <title>Surat Keterangan Tidak Mampu</title>
 </head>
+
 <body>
-    <table style="text-align:center; width:100% ">
-        @foreach ($data as $item)
+    <table class="cup">  
         <tr>
             <td><img src="{{ asset('images/logo_Bukittinggi.png') }}" style="width: 90px;"><hr> </td>
-            <td  style="text-align: center;">
-                <p style="line-height: 2px; font-size:18px">PEMERINTAHAN KOTA BUKITTINGGI</p>
-                <p style="line-height: 2px; font-size:18px ">KECAMATAN {{ $item->penduduk->kecamatan }}</p>
-                <p style="line-height: 2px; font-size:33px " >KELURAHAN {{ $item->penduduk->kelurahan }}</p>
-                <p style="line-height: 2px; font-size:14px">Jalan Sanjai Dalam Kode Pos 26129 Bukittinggi</p>
+            <td  class="text-center">
+                <p style="font-size:18px">PEMERINTAHAN KOTA BUKITTINGGI</p>
+                <p  style="font-size:18px; text-transform: UPPERCASE">KECAMATAN {{ $data->penduduk->kecamatan }}</p>
+                <p style="font-size:33px; text-transform: UPPERCASE " >KELURAHAN {{ $data->getkodeDesa->nama_kel_desa }}</p>
+                <p style="font-size:14px">Jalan Sanjai Dalam Kode Pos 26129 Bukittinggi</p>
                 <hr>
             </td>
-        </tr>
-        @endforeach 
+        </tr>     
     </table>
 
-    @foreach ($data as $item)
-        <h3 style="text-align: center; text-decoration:underline">SURAT KETERANGAN TIDAK MAMPU</h3>
-        <p style="text-align: center;line-height: 1px ">Nomor:420/.../KEL-MG/XII-2021</p><br>
+    <h3 style="text-decoration:underline" class="text-center">SURAT KETERANGAN TIDAK MAMPU</h3>
+    <p style="line-height: 1px " class="text-center">{{ $data->nomor_surat }}</p><br>
 
-        <p style="text-indent: 0.5in">Yang bertanda tangan dibawah ini Lurah {{ $item->penduduk->kelurahan }} Kecamatan {{ $item->penduduk->kecamatan }} Kota Bukittinggi dengan ini menerangkan bahwa:</p><br>
-    @endforeach
+    <p class="text-paragraf">Yang bertanda tangan dibawah ini Lurah {{ $data->getkodeDesa->nama_kel_desa }} Kecamatan {{ $data->penduduk->kecamatan }} Kota Bukittinggi dengan ini menerangkan bahwa:</p><br>
     
-    <table style="margin-left: 130px; margin-right:auto; " cellpadding="3" >
-            @foreach ($data as $item)
+    <table class="table-bio" cellpadding="3" >
+           
             <tr>
                 <td>Nama</td>
-                <td>:{{ $item->penduduk->nama }}</td>
+                <td style="text-transform: UPPERCASE">: {{ $data->penduduk->nama }}</td>
             </tr>
             <tr>
                 <td>NIK</td>
-                <td>:{{ $item->nik }}</td>
+                <td>: {{ $data->nik }}</td>
             </tr>
             <tr>
                 <td>Tempat/Tgl.Lahir</td>
-                <td>:{{ $item->penduduk->tmp_lahir }},{{ $item->penduduk->tgl_lahir }}</td>
+                <td style="text-transform: UPPERCASE">: {{ $data->penduduk->tmp_lahir }}, {{ \Carbon\Carbon::create($data->penduduk->tgl_lahir)->format('d-m-Y') }}</td>
             </tr>
             <tr>
                 <td>Agama/Kewarganegaraan</td>
-                <td>:{{ $item->penduduk->agama }}/Indonesia</td>
+                <td>: {{ $data->penduduk->agama }}/Indonesia</td>
             </tr>
             <tr>
                 <td>Pekerjaan</td>
-                <td>:{{ $item->penduduk->pekerjaan }}</td>
+                <td style="text-transform: UPPERCASE">: {{ $data->penduduk->pekerjaan }}</td>
             </tr>
             <tr>
                 <td>Alamat</td>
-                <td>:{{ $item->penduduk->alamat }}/RT.{{ $item->penduduk->rt }}/RW{{ $item->penduduk->rw }}<br>
-                     Kelurahan:{{ $item->penduduk->kelurahan }}<br>
-                     Kecamatan:{{ $item->penduduk->kecamatan }}<br>
-                     Kota/Kab:{{ $item->penduduk->kotakab }}
-                </td>
+                <td style="text-transform: capitalize">:
+                    {{ $data->penduduk->alamat }}
+                    <table>
+                        <tr>
+                            <td>Kelurahan:</td>
+                            <td style="text-transform: capitalize">{{ $data->getkodeDesa->nama_kel_desa }}</td>
+
+                        </tr>
+                        <tr>
+                            <td>Kecamatan:</td>
+                            <td style="text-transform: capitalize">{{ $data->penduduk->kecamatan }}</td>
+                        </tr>
+                    </table>
+                </td>  
             </tr>
-            @endforeach
     </table>
     
-    @foreach ($data as $item)
-    <p style="text-indent: 0.5in; line-height: 100%" >Nama tersebut diatas adalah penduduk Kelurahan {{ $item->penduduk->kelurahan }} Kecamatan
-   {{$item->penduduk->kecamatan}} Kota Bukittinggi. Sesuai dengan data base yang ada di kelurahan termasuk KELUARGA TIDAK MAMPU,
+   
+   <p style="line-height: 100%" class="text-paragraf" >Nama tersebut diatas adalah penduduk Kelurahan {{ $data->getkodeDesa->nama_kel_desa }} Kecamatan
+   {{$data->penduduk->kecamatan}} Kota Bukittinggi. Sesuai dengan data base yang ada di kelurahan termasuk KELUARGA TIDAK MAMPU,
    dengan tanggungan sebagai berikut:</p>
-   @endforeach
+  
 
-   <table style="margin-left: 130px; margin-right:auto; " border="1">
+   <table class="table-kel">
        <thead>
            <tr>
-               <th>No</th>
+               <th>No.</th>
                <th>Nama</th>
                <th>Pekerjaan</th>
                <th>ket</th>
            </tr>
        </thead>
        <tbody>
-            <tr>
-                <td>1</td>
-                <td>1</td>
-                <td>1</td>
-                <td>1</td>
-            </tr>
+           @foreach ($datakel as $index => $item)
+           <tr>
+            <td class="text-center">{{ $index+1 }}</td>
+            <td>{{ $item->nama }}</td>
+            <td class="text-center" style="text-transform: UPPERCASE">{{ $item->pekerjaan }}</td>
+            <td class="text-center" style="text-transform: capitalize">{{ $item->stat_hbkel }}</td>
+           </tr>
+           @endforeach
        </tbody>
    </table>
 
-   <P style="text-indent: 0.5in; line-height: 130%">Demikianlah Surat Keterangan ini dikeluarkan untuk dapat dipergunakan sebagai {{ $item->tujuan }}
+   <P style="line-height: 130%" class="text-paragraf">Demikianlah Surat Keterangan ini dikeluarkan untuk dapat dipergunakan sebagai     {{ $data->tujuan }}
    </P>
 
-   @foreach ($data as $item)
     <div style="margin-left: 450px; margin-top:10px; text-align:center" >
-        <p style="line-height: 10%">Bukittinggi, {{ $item->created_at }}</p>
-        <p  style="line-height: 10%">a.n.LURAH {{ $item->penduduk->kelurahan }}</p>
-        <p  style="line-height: 50%">Kasi Agsosbud</p><br>
-        <p style=" text-decoration:underline;  margin-top:30px"> WENNY KELDA, S.Sog</p>
-        <p style="line-height: 10%">NIP:196 0109 1983030 2 004</p>
+        <p style="line-height: 10%">Bukittinggi, {{ \Carbon\Carbon::create($data->created_at)->format('d-m-Y') }}</p>
+        <p  style="line-height: 10%">a.n.LURAH {{ $data->getkodeDesa->nama_kel_desa }}</p>
+        <p  style="line-height: 50%">{{ $TTD->jabatan }}</p><br>
+        @if($data->status_surat == '2')
+            <img src="{{ asset('upload/'.$TTD->ttd) }}" alt="" style="width:130px">
+        @endif
+        <p style=" text-decoration:underline;  margin-top:30px"> {{ $TTD->nama }}</p>
+        <p style="line-height: 10%">NIP:{{ $TTD->nip }}</p>
     </div>
-    @endforeach
 
 </body>
+
 </html>
